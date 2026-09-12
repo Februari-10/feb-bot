@@ -1,6 +1,9 @@
 import "dotenv/config";
 import { Client, GatewayIntentBits } from "discord.js";
-import { handleLtcCommand } from "./commands/feb/ltcCommand.js";
+import {
+    handleLtcButton,
+    handleLtcCommand,
+} from "./commands/feb/ltcCommand.js";
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds],
@@ -11,6 +14,11 @@ client.once("clientReady", () => {
 });
 
 client.on("interactionCreate", async interaction => {
+    if (interaction.isButton()) {
+        await handleLtcButton(interaction);
+        return;
+    }
+
     if (!interaction.isChatInputCommand()) return;
 
     if (interaction.commandName !== "feb") return;
